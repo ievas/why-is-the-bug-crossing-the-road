@@ -61,6 +61,7 @@ let Player = function(){//KONSTRUKTORS
   this.x = this.startX;
   this.y = this.startY;
   this.row = 5;
+  this.win = false;
 };
 //player.render(){
 //  ctx.drawImage(Rescources.get(this.sprite), this.x, this.y);
@@ -78,15 +79,22 @@ for (let i = 0; i < allEnemies.length; i++) {
   if (this.row === enemy.row && enemy.x + enemy.horizontalMove/1.5 > this.x && enemy.x < this.x + this.horizontalMove/1.5){
     this.resetPosition();
   };
-
 }
-
+if (this.row === 0){
+  console.log('win!');
+  this.win = true;
+  this.resetPosition();
+}
 };
 Player.prototype.render = function(){//draws on screen
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 Player.prototype.handleInput = function(input){
 //this method is handling input from the keyboard event listener -> updating x and y coordinates
+if (this.win){
+  return;
+}//===true
+
 switch(input){
   case 'left':
     if (this.x > 0){
@@ -94,10 +102,10 @@ switch(input){
   }
     break;
   case 'up':
+    this.row--;
     if (this.y > (this.verticalMove * 1.9)){
       this.y -= this.verticalMove;
-      this.row--;
-  }
+    }
     break;
   case 'right':
     if (this.x < this.horizontalMove * 3.9){
