@@ -1,13 +1,32 @@
 
-let Enemy = function(x, y, speed) {//KONSTRUKTORS
-    // Variables go here
-    this.x = x;
-    this.y = y + 50;
-    this.side = 101;
-    this.speed = speed;
+let Enemy = function(x, row, speed, person) {
 
-    this.sprite = 'images/char-boy.png';
+  this.x = x;
+  this.row = row;
+
+  this.y = row * 83 - 25;
+
+  this.horizontalMove = 101;
+  this.speed = speed;
+
+  this.sprite = `images/char-${person}.png`;
 };
+//*****
+// let Enemy = function(x, y, speed, person) {//KONSTRUKTORS
+//     // Variables go here
+//     this.x = x;
+//     this.y = y + 55;
+//     this.horizontalMove = 101;
+//     this.speed = speed;
+//
+//     this.sprite = `images/char-${person}.png`;
+//
+//     // this.sprite = 'images/char-boy.png';
+//     // 'images/char-cat-girl.png',
+//     // 'images/char-pink-girl.png',
+//     // 'images/char-horn-girl.png',
+// };
+//****
 //methods
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -16,13 +35,13 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
 
-    if(this.x < this.side * 5){
+    if(this.x < this.horizontalMove * 5){
       //move forward
       this.x += this.speed * dt;//increment x by speed and multiply by dt
       //reset the enemies position if it crossed the game board
     } // by MC
     else{
-      this.x = -this.side;//reset enemy position
+      this.x = -this.horizontalMove;//reset enemy position
     }
 
 };
@@ -35,12 +54,13 @@ Enemy.prototype.render = function() {
 let Player = function(){//KONSTRUKTORS
   //Variables go here
   this.sprite = 'images/player-bug.png';
-  this.side = 101;
-  this.up = 83;
-  this.startX = this.side * 2;
-  this.startY = this.up * 4.5;
+  this.horizontalMove = 101;
+  this.verticalMove = 83;
+  this.startX = this.horizontalMove * 2.05;
+  this.startY = (this.verticalMove * 5) + 50;
   this.x = this.startX;
   this.y = this.startY;
+  this.row = 5;
 };
 //player.render(){
 //  ctx.drawImage(Rescources.get(this.sprite), this.x, this.y);
@@ -52,6 +72,15 @@ Player.prototype.update = function(dt){
 //check checkCollisions//
 //did players x and y coordinates collide with enemy sprite (or its coordinates?)
 //a win or level up: did players x and y coordinates reached river tiles sprite (or its coordinates?)
+for (let i = 0; i < allEnemies.length; i++) {
+
+  let enemy = allEnemies[i];
+  if (this.row === enemy.row && enemy.x + enemy.horizontalMove/1.5 > this.x && enemy.x < this.x + this.horizontalMove/1.5){
+    this.resetPosition();
+  };
+
+}
+
 };
 Player.prototype.render = function(){//draws on screen
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -61,35 +90,39 @@ Player.prototype.handleInput = function(input){
 switch(input){
   case 'left':
     if (this.x > 0){
-      this.x -= this.side;
+      this.x -= this.horizontalMove;
   }
     break;
   case 'up':
-    if (this.y > (this.up * 1.5)){
-      this.y -= this.up;
+    if (this.y > (this.verticalMove * 1.9)){
+      this.y -= this.verticalMove;
+      this.row--;
   }
     break;
   case 'right':
-    if (this.x < this.side * 3.9){
-      this.x += this.side;
+    if (this.x < this.horizontalMove * 3.9){
+      this.x += this.horizontalMove;
   }
     break;
   case 'down':
-  if (this.y < this.up * 5){
-      this.y += this.up;
+  if (this.y < this.verticalMove * 5){
+      this.y += this.verticalMove;
+      this.row++;
   }
     break;
 }
 }
 Player.prototype.resetPosition = function(){
-  //reset to starting point x and y
+  this.x = this.startX;
+  this.y = this.startY;
+  this.row = 5;
 }
 // instantiate your objects.
 
-let pinkGirl = new Enemy(-101, 0, 150);
-let hornGirl = new Enemy(-101, 83, 100);
-let bugBoy = new Enemy((-101*2), 83, 200);
-let catGirl = new Enemy(-101, (83*2), 80);
+let pinkGirl = new Enemy(-101, 1, 150, 'pink-girl-copy');
+let hornGirl = new Enemy(-101, 2, 100, 'horn-girl');
+let bugBoy = new Enemy((-101*2), 2, 200, 'boy');
+let catGirl = new Enemy(-101, 3, 80, 'cat-girl');
 
 let player = new Player();
 let allEnemies = [];

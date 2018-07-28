@@ -93,7 +93,7 @@ let Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
        });
-      //  player.update();
+            player.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -171,11 +171,13 @@ let Engine = (function(global) {
     Resources.load([
         'images/stone-block.png',
         'images/water-block.png',
+        'images/water-block-copy.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/char-cat-girl.png',
         'images/char-pink-girl.png',
+        'images/char-pink-girl-copy.png',
         'images/char-horn-girl.png',
         'images/player-bug.png',
     ]);
