@@ -20,13 +20,18 @@ let Engine = (function(global) {
      */
     let doc = global.document,
         win = global.window,
-        canvas = doc.createElement('canvas'),
-        ctx = canvas.getContext('2d'),
+        canvasOne = doc.createElement('canvas'),
+        canvasTwo = doc.createElement('canvas'),
+        ctxOne = canvasOne.getContext('2d'),
+        ctxTwo = canvasTwo.getContext('2d'),
         lastTime;
 
-    canvas.width = 505;
-    canvas.height = 606;
-    doc.body.appendChild(canvas);
+    canvasOne.width = 505;
+    canvasOne.height = 606;
+    canvasTwo.width = 750;
+    canvasTwo.height = 100;
+    doc.body.appendChild(canvasOne);
+    doc.body.appendChild(canvasTwo);
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -119,7 +124,8 @@ let Engine = (function(global) {
             row, col;
 
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctxOne.clearRect(0,0,canvasOne.width, canvasOne.height);
+        ctxTwo.clearRect(0,0, canvasTwo.width, canvasTwo.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -134,11 +140,12 @@ let Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                ctxOne.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
 
         renderEntities();
+
     }
 
     /* This function is called by the render function and is called on each game
@@ -154,6 +161,10 @@ let Engine = (function(global) {
       });
 
         player.render();
+      allStars.forEach(function(star) {
+        star.render();
+      });
+      title.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -180,6 +191,11 @@ let Engine = (function(global) {
         'images/char-pink-girl-copy.png',
         'images/char-horn-girl.png',
         'images/player-bug.png',
+        'images/Star.png',
+        'images/big-star.png',
+        'images/question.png',
+        'images/red_star.png'
+
     ]);
     Resources.onReady(init);
 
@@ -187,5 +203,6 @@ let Engine = (function(global) {
      * object when run in a browser) so that developers can use it more easily
      * from within their app.js files.
      */
-    global.ctx = ctx;
+    global.ctxOne = ctxOne;
+    global.ctxTwo = ctxTwo;
 })(this);

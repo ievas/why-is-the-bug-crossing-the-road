@@ -12,20 +12,7 @@ let Enemy = function(x, row, speed, person) {
   this.sprite = `images/char-${person}.png`;
 };
 //*****
-// let Enemy = function(x, y, speed, person) {//KONSTRUKTORS
-//     // Variables go here
-//     this.x = x;
-//     this.y = y + 55;
-//     this.horizontalMove = 101;
-//     this.speed = speed;
-//
-//     this.sprite = `images/char-${person}.png`;
-//
-//     // this.sprite = 'images/char-boy.png';
-//     // 'images/char-cat-girl.png',
-//     // 'images/char-pink-girl.png',
-//     // 'images/char-horn-girl.png',
-// };
+
 //****
 //methods
 // Update the enemy's position, required method for game
@@ -48,7 +35,7 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 let Player = function(){//KONSTRUKTORS
@@ -87,12 +74,13 @@ if (this.row === 0){
 }
 };
 Player.prototype.render = function(){//draws on screen
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 Player.prototype.handleInput = function(input){
 //this method is handling input from the keyboard event listener -> updating x and y coordinates
 if (this.win){
   return;
+
 }//===true
 
 switch(input){
@@ -136,9 +124,46 @@ let player = new Player();
 let allEnemies = [];
 
 allEnemies.push(bugBoy, hornGirl, pinkGirl, catGirl);
+//****
+let Star = function(x, row) {//KONSTRUKTORS
+    this.x = x +10;
+     this.y = row + 20;
+     this.row = row;
+     this.sprite = 'images/red_star.png';
+};
 
+Star.prototype.render = function(){
+  if(player.win){
+    ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
+  }
+}
+let allStars = [];
+let firstStar = new Star(0, 0);
+let secondStar = new Star(101, 0);
+let thirdStar = new Star(202,0);
+let fourthStar = new Star(303,0);
+let fifthStar = new Star(404,0);
 
-
+allStars.push(firstStar, secondStar, thirdStar, fourthStar, fifthStar);
+//****
+let Text = function() {
+    //this.x = x;
+    this.y = 200;
+    this.x = 40;
+    //this.levelUpText = 'WhY DiD ThE BuG CrOsS ThE RoAd?'
+    this.sprite = 'images/question.png'
+}
+Text.prototype.render = function() {
+  if(player.win){
+    //ctxTwo.fillStyle = 'gold';
+    ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
+    //ctxTwo.font = 'bolder 30px Verdana';
+    //ctxTwo.shadowColor = 'black';
+    //ctxTwo.shadowBlur = 10;
+  }
+};
+let title = new Text();
+//*****
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
