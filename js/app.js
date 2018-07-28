@@ -1,9 +1,10 @@
 
-let Enemy = function() {//KONSTRUKTORS
+let Enemy = function(x, y, speed) {//KONSTRUKTORS
     // Variables go here
-    this.x = 0;
-    this.y = 0;
-    //speeds (?)
+    this.x = x;
+    this.y = y + 50;
+    this.side = 101;
+    this.speed = speed;
 
     this.sprite = 'images/char-boy.png';
 };
@@ -15,10 +16,15 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
 
-    //if suggested by MC
-    //move forward
-    //increment x by speed and multiply by dt
-    //reset the enemies position if it crossed the game board
+    if(this.x < this.side * 5){
+      //move forward
+      this.x += this.speed * dt;//increment x by speed and multiply by dt
+      //reset the enemies position if it crossed the game board
+    } // by MC
+    else{
+      this.x = -this.side;//reset enemy position
+    }
+
 };
 
 // Draw the enemy on the screen, required method for game
@@ -76,18 +82,19 @@ switch(input){
 }
 }
 Player.prototype.resetPosition = function(){
-  //reset to starting point x and y -> where is starting point, how do I find it, where do I set it?
+  //reset to starting point x and y
 }
 // instantiate your objects.
 
-//let pinkGirl = new Enemy();
-//let hornGirl = new Enemy();
-let bugBoy = new Enemy();
-//for loop to create a new enemy object with random speed (?)
+let pinkGirl = new Enemy(-101, 0, 150);
+let hornGirl = new Enemy(-101, 83, 100);
+let bugBoy = new Enemy((-101*2), 83, 200);
+let catGirl = new Enemy(-101, (83*2), 80);
+
 let player = new Player();
 let allEnemies = [];
 
-allEnemies.push(bugBoy);
+allEnemies.push(bugBoy, hornGirl, pinkGirl, catGirl);
 
 
 
