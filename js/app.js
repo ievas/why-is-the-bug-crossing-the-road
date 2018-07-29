@@ -79,8 +79,8 @@ Player.prototype.render = function(){//draws on screen
 Player.prototype.handleInput = function(input){
 //this method is handling input from the keyboard event listener -> updating x and y coordinates
 if (this.win){
-  return;
-
+  //return;
+level++;
 }//===true
 
 switch(input){
@@ -116,14 +116,16 @@ Player.prototype.resetPosition = function(){
 // instantiate your objects.
 
 let pinkGirl = new Enemy(-101, 1, 150, 'pink-girl-copy');
-let hornGirl = new Enemy(-101, 2, 100, 'horn-girl');
-let bugBoy = new Enemy((-101*2), 2, 200, 'boy');
+let hornGirl = new Enemy(-101, 2, 200, 'horn-girl');
+let bugBoy = new Enemy((-101*2), 2, 70, 'boy');
 let catGirl = new Enemy(-101, 3, 80, 'cat-girl');
+let bugBoy2 = new Enemy(-101, 3, 300, 'boy');
+let hornGirl2 = new Enemy(-101, 1, 90, 'horn-girl');
 
 let player = new Player();
 let allEnemies = [];
 
-allEnemies.push(bugBoy, hornGirl, pinkGirl, catGirl);
+allEnemies.push(bugBoy, hornGirl, pinkGirl, catGirl, bugBoy2, hornGirl2);
 //****
 let Star = function(x, row) {//KONSTRUKTORS
     this.x = x +10;
@@ -135,6 +137,9 @@ let Star = function(x, row) {//KONSTRUKTORS
 Star.prototype.render = function(){
   if(player.win){
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
+    setTimeout(function(){
+      let removed = allStars.splice(0)
+    }, 2000)
   }
 }
 let allStars = [];
@@ -150,20 +155,37 @@ let Text = function() {
     //this.x = x;
     this.y = 200;
     this.x = 40;
-    //this.levelUpText = 'WhY DiD ThE BuG CrOsS ThE RoAd?'
+    this.levelUpText = 'WhY DiD ThE BuG CrOsS ThE RoAd?'
     this.sprite = 'images/question.png'
 }
 Text.prototype.render = function() {
   if(player.win){
-    //ctxTwo.fillStyle = 'gold';
-    ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctxTwo.fillStyle = 'gold';
+    ctxTwo.fillText(this.levelUpText, this.x, this.y);
     //ctxTwo.font = 'bolder 30px Verdana';
     //ctxTwo.shadowColor = 'black';
     //ctxTwo.shadowBlur = 10;
   }
+
 };
 let title = new Text();
+//***
+let Level = function(){
+  this.title = 'Level'
+  this.level = 1;
+  this.x = 50;
+  this.y = 50;
+}
+Level.prototype.render = function() {
+  ctxTwo.font = 'bolder 30px Verdana';
+  ctxTwo.textAlign = 'left';
+  ctxTwo.fillStyle = 'gold';
+  ctxTwo.fillText(`${this.title}: ${this.level}`, this.x, this.y);
+}
 //*****
+//let level = 1;
+let levelTitle = new Level();
+
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {

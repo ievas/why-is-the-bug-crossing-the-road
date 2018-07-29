@@ -28,8 +28,8 @@ let Engine = (function(global) {
 
     canvasOne.width = 505;
     canvasOne.height = 606;
-    canvasTwo.width = 750;
-    canvasTwo.height = 100;
+    canvasTwo.width = 505;
+    canvasTwo.height = 75;
     doc.body.appendChild(canvasOne);
     doc.body.appendChild(canvasTwo);
 
@@ -165,6 +165,7 @@ let Engine = (function(global) {
         star.render();
       });
       title.render();
+      levelTitle.render();
     }
 
     /* This function does nothing but it could have been a good place to
