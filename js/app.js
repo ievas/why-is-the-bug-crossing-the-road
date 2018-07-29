@@ -99,9 +99,8 @@ Player.prototype.handleInput = function(input){
 
 switch(input){
   case 'left':
-    if (this.x > 2){
+    if (this.x >this.horizontalMove){
       this.x -= this.horizontalMove;
-      console.log('boo');
   }
     break;
   case 'up':
@@ -153,7 +152,7 @@ Star.prototype.render = function(){
   if(player.win){
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
     setTimeout(function(){
-      let removed = allStars.splice(0)
+      player.win = false;
     }, 2000);
   };
 };
