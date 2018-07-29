@@ -191,6 +191,7 @@ let Engine = (function(global) {
         'images/char-pink-girl.png',
         'images/char-pink-girl-copy.png',
         'images/char-horn-girl.png',
+        'images/char-princess-girl.png',
         'images/player-bug.png',
         'images/Star.png',
         'images/big-star.png',

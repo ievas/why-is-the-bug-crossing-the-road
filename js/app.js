@@ -37,7 +37,7 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-
+//****
 let Level = function(){
   this.title = 'Level'
   this.level = 1;
@@ -51,6 +51,8 @@ Level.prototype.render = function() {
   ctxTwo.fillText(`${this.title}: ${this.level}`, this.x, this.y);
 }
 let levelTitle = new Level();
+//*****
+
 //*****
 let Player = function(){//KONSTRUKTORS
   //Variables go here
@@ -71,22 +73,24 @@ let Player = function(){//KONSTRUKTORS
 Player.prototype.update = function(dt){
   //Here goes everything we want to update about players position as each game loop starts
   //update position/multiply coordinates by dt?
-//check checkCollisions//
-//did players x and y coordinates collide with enemy sprite (or its coordinates?)
-//a win or level up: did players x and y coordinates reached river tiles sprite (or its coordinates?)
-for (let i = 0; i < allEnemies.length; i++) {
+  //check checkCollisions//
+  //did players x and y coordinates collide with enemy sprite (or its coordinates?)
+  //a win or level up: did players x and y coordinates reached river tiles sprite (or its coordinates?)
+  for (let i = 0; i < allEnemies.length; i++) {
+    //Collision detection
+    let enemy = allEnemies[i];
+    if (this.row === enemy.row && enemy.x + enemy.horizontalMove/1.5 > this.x && enemy.x < this.x + this.horizontalMove/1.5){
+      this.resetPosition();
+    };
+  }
 
-  let enemy = allEnemies[i];
-  if (this.row === enemy.row && enemy.x + enemy.horizontalMove/1.5 > this.x && enemy.x < this.x + this.horizontalMove/1.5){
+  if (this.row === 0) {
+    console.log('win!');
+    this.win = true;
     this.resetPosition();
-  };
-}
-if (this.row === 0){
-  console.log('win!');
-  this.win = true;
-  this.resetPosition();
-  levelTitle.level++;
-}
+    levelTitle.level++;
+    allEnemies.push(randomEnemy());
+  }
 };
 Player.prototype.render = function(){//draws on screen
   ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -128,18 +132,36 @@ Player.prototype.resetPosition = function(){
   this.row = 5;
 }
 // instantiate your objects.
-
+//if(levelTitle.level === 1){}
 let pinkGirl = new Enemy(-101, 1, 150, 'pink-girl-copy');
 let hornGirl = new Enemy(-101, 2, 200, 'horn-girl');
 let bugBoy = new Enemy((-101*2), 2, 70, 'boy');
 let catGirl = new Enemy(-101, 3, 80, 'cat-girl');
 let bugBoy2 = new Enemy(-101, 3, 300, 'boy');
 let hornGirl2 = new Enemy(-101, 1, 90, 'horn-girl');
+let princess = new Enemy(-101, 1, 80, 'princess-girl')
+
+//if(levelTitle.level === 2){}
+//if(levelTitle.level === 3){}
+//if(player.win){
+//allEnemies.push(princess);
+//let randomEnemy;
+//enemy.speed + 10;
+//}
+
+
+function randomEnemy() {
+  let randomSpeed = 50 + Math.floor(Math.random() * 251);
+  let randomRow = 1 + Math.floor(Math.random() * 3);
+  let persons = ['pink-girl-copy', 'horn-girl', 'cat-girl', 'boy', 'princess-girl'];
+  let randomPerson = persons[Math.floor(Math.random() * persons.length)];
+  return new Enemy(-101, randomRow, randomSpeed, randomPerson);
+}
 
 let player = new Player();
 let allEnemies = [];
 
-allEnemies.push(bugBoy, hornGirl, pinkGirl, catGirl, bugBoy2, hornGirl2);
+allEnemies.push(bugBoy, pinkGirl, catGirl);
 //****
 let Star = function(x, row) {//KONSTRUKTORS
     this.x = x +10;
@@ -153,7 +175,7 @@ Star.prototype.render = function(){
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
     setTimeout(function(){
       player.win = false;
-    }, 2000);
+    }, 1000);
   };
 };
 let allStars = [];
