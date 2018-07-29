@@ -38,6 +38,20 @@ Enemy.prototype.render = function() {
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+let Level = function(){
+  this.title = 'Level'
+  this.level = 1;
+  this.x = 50;
+  this.y = 50;
+}
+Level.prototype.render = function() {
+  ctxTwo.font = 'bolder 30px Verdana';
+  ctxTwo.textAlign = 'left';
+  ctxTwo.fillStyle = 'gold';
+  ctxTwo.fillText(`${this.title}: ${this.level}`, this.x, this.y);
+}
+let levelTitle = new Level();
+//*****
 let Player = function(){//KONSTRUKTORS
   //Variables go here
   this.sprite = 'images/player-bug.png';
@@ -71,6 +85,7 @@ if (this.row === 0){
   console.log('win!');
   this.win = true;
   this.resetPosition();
+  levelTitle.level++;
 }
 };
 Player.prototype.render = function(){//draws on screen
@@ -78,15 +93,15 @@ Player.prototype.render = function(){//draws on screen
 };
 Player.prototype.handleInput = function(input){
 //this method is handling input from the keyboard event listener -> updating x and y coordinates
-if (this.win){
+//if (this.win){
   //return;
-level++;
-}//===true
+//}//===true
 
 switch(input){
   case 'left':
-    if (this.x > 0){
+    if (this.x > 2){
       this.x -= this.horizontalMove;
+      console.log('boo');
   }
     break;
   case 'up':
@@ -139,9 +154,9 @@ Star.prototype.render = function(){
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
     setTimeout(function(){
       let removed = allStars.splice(0)
-    }, 2000)
-  }
-}
+    }, 2000);
+  };
+};
 let allStars = [];
 let firstStar = new Star(0, 0);
 let secondStar = new Star(101, 0);
@@ -170,21 +185,7 @@ Text.prototype.render = function() {
 };
 let title = new Text();
 //***
-let Level = function(){
-  this.title = 'Level'
-  this.level = 1;
-  this.x = 50;
-  this.y = 50;
-}
-Level.prototype.render = function() {
-  ctxTwo.font = 'bolder 30px Verdana';
-  ctxTwo.textAlign = 'left';
-  ctxTwo.fillStyle = 'gold';
-  ctxTwo.fillText(`${this.title}: ${this.level}`, this.x, this.y);
-}
-//*****
-//let level = 1;
-let levelTitle = new Level();
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
