@@ -245,6 +245,7 @@ function popUp(){
 
 function reset(){
   levelTitle.level = 1;
+  allEnemies = [];
   allEnemies.push(bugBoy, pinkGirl, catGirl);
   allLives.push(life1, life2, life3, life4);
   document.getElementById('tryAgain').style.display = 'none';
