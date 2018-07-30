@@ -88,6 +88,7 @@ Player.prototype.update = function(dt){
       if (player.collision === true){
         collisionCount++;
         };
+  //better: allLives.splice(5-collisionCount);
       if(collisionCount===1){
           allLives.splice(3)
         };
@@ -99,7 +100,6 @@ Player.prototype.update = function(dt){
         };
       if(collisionCount===4){
           allLives.splice(0);
-          //modal
       };
       if (collisionCount>=5){
       player.sprite = "images/player-bug-cry.png"
@@ -201,7 +201,7 @@ Star.prototype.render = function(){
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
     setTimeout(function(){
       player.win = false;
-    }, 1000);
+    }, 500);
   };
 };
 let allStars = [];
@@ -248,37 +248,14 @@ function reset(){
   allEnemies = [];
   allEnemies.push(bugBoy, pinkGirl, catGirl);
   allLives.push(life1, life2, life3, life4);
-  document.getElementById('tryAgain').style.display = 'none';
-  player.sprite = 'images/player-bug.png'
   collisionCount = 0;
+  let tryAgain = document.getElementById('tryAgain');
+  tryAgain.removeEventListener('click', reset);
+  document.body.removeChild(tryAgain);
+  player.sprite = 'images/player-bug.png'
 };
-// <3 <3 ;) :( kaut kā viss galīgi garām
 
-//)
-
-
-//better: allLives.splice(5-collisionCount);
-//****
-// let Text = function() {
-//     //this.x = x;
-//     this.y = 100;
-//     this.x = 40;
-//     this.levelUpText = 'WhY DiD ThE BuG CrOsS ThE RoAd?'
-//     this.sprite = 'images/question.png'
-// }
-// Text.prototype.render = function() {
-//   if(player.win){
-//     ctxTwo.fillStyle = 'gold';
-//     ctxTwo.fillText(this.levelUpText, this.x, this.y);
-//     //ctxTwo.font = 'bolder 30px Verdana';
-//     //ctxTwo.shadowColor = 'black';
-//     //ctxTwo.shadowBlur = 10;
-//   }
-//
-// };
-// let title = new Text();
 //***
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
