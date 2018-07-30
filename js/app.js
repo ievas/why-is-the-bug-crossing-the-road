@@ -45,9 +45,9 @@ let Level = function(){
   this.y = 50;
 }
 Level.prototype.render = function() {
-  ctxTwo.font = 'bolder 30px Verdana';
+  ctxTwo.font = 'bolder 30px Kirang Haerang';
   ctxTwo.textAlign = 'left';
-  ctxTwo.fillStyle = 'gold';
+  ctxTwo.fillStyle = '#c73400';
   ctxTwo.fillText(`${this.title}: ${this.level}`, this.x, this.y);
 }
 let levelTitle = new Level();
@@ -65,11 +65,14 @@ let Player = function(){//KONSTRUKTORS
   this.y = this.startY;
   this.row = 5;
   this.win = false;
+  this.collision = false;
 };
 //player.render(){
 //  ctx.drawImage(Rescources.get(this.sprite), this.x, this.y);
 //}
 //methods
+
+
 Player.prototype.update = function(dt){
   //Here goes everything we want to update about players position as each game loop starts
   //update position/multiply coordinates by dt?
@@ -81,6 +84,29 @@ Player.prototype.update = function(dt){
     let enemy = allEnemies[i];
     if (this.row === enemy.row && enemy.x + enemy.horizontalMove/1.5 > this.x && enemy.x < this.x + this.horizontalMove/1.5){
       this.resetPosition();
+      this.collision = true;
+      if (player.collision === true){
+        collisionCount++;
+        };
+      if(collisionCount===1){
+          allLives.splice(3)
+        };
+      if(collisionCount===2){
+          allLives.splice(2)
+        };
+      if(collisionCount===3){
+          allLives.splice(1)
+        };
+      if(collisionCount===4){
+          allLives.splice(0);
+          //modal
+      };
+      if (collisionCount>=5){
+      player.sprite = "images/player-bug-cry.png"
+      console.log('cry')
+      //try again//reset levels
+      popUp();
+      };
     };
   }
 
@@ -92,14 +118,14 @@ Player.prototype.update = function(dt){
     allEnemies.push(randomEnemy());
   }
 };
-Player.prototype.render = function(){//draws on screen
+Player.prototype.render = function(){//draws player on screen
   ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 Player.prototype.handleInput = function(input){
 //this method is handling input from the keyboard event listener -> updating x and y coordinates
-//if (this.win){
-  //return;
-//}//===true
+if (collisionCount>=5){
+  return;
+}//===true
 
 switch(input){
   case 'left':
@@ -139,7 +165,7 @@ let bugBoy = new Enemy((-101*2), 2, 70, 'boy');
 let catGirl = new Enemy(-101, 3, 80, 'cat-girl');
 let bugBoy2 = new Enemy(-101, 3, 300, 'boy');
 let hornGirl2 = new Enemy(-101, 1, 90, 'horn-girl');
-let princess = new Enemy(-101, 1, 80, 'princess-girl')
+let princess = new Enemy(-101, 1, 80, 'princess-girl');
 
 //if(levelTitle.level === 2){}
 //if(levelTitle.level === 3){}
@@ -187,24 +213,69 @@ let fifthStar = new Star(404,0);
 
 allStars.push(firstStar, secondStar, thirdStar, fourthStar, fifthStar);
 //****
-let Text = function() {
-    //this.x = x;
-    this.y = 200;
-    this.x = 40;
-    this.levelUpText = 'WhY DiD ThE BuG CrOsS ThE RoAd?'
-    this.sprite = 'images/question.png'
+let Life = function(x, y){
+  this.sprite = 'images/player-lives.png';
+  this.x = x;
+  this.x = y;
 }
-Text.prototype.render = function() {
-  if(player.win){
-    ctxTwo.fillStyle = 'gold';
-    ctxTwo.fillText(this.levelUpText, this.x, this.y);
-    //ctxTwo.font = 'bolder 30px Verdana';
-    //ctxTwo.shadowColor = 'black';
-    //ctxTwo.shadowBlur = 10;
-  }
-
+Life.prototype.render = function(){
+  ctxTwo.drawImage(Resources.get(this.sprite), this.x, this.y);
+  //ctxTwo
 };
-let title = new Text();
+let life1 = new Life(555,101);
+let life2 = new Life(5,10);
+let life3 = new Life(5,20);
+let life4 = new Life(5,30);
+
+let allLives = [];
+allLives.push(life1, life2, life3, life4);
+
+
+let collisionCount = 0;
+
+
+function popUp(){
+  let tryAgain = document.createElement('div');
+  tryAgain.id = 'tryAgain';
+  document.body.appendChild(tryAgain);
+  document.getElementById('tryAgain').style.display = 'flex';
+  tryAgain.innerHTML = `Your game is over at level ${levelTitle.level} <br> Play again?`;
+  tryAgain.addEventListener('click', reset);
+};
+
+function reset(){
+  levelTitle.level = 1;
+  allEnemies.push(bugBoy, pinkGirl, catGirl);
+  allLives.push(life1, life2, life3, life4);
+  document.getElementById('tryAgain').style.display = 'none';
+  player.sprite = 'images/player-bug.png'
+  collisionCount = 0;
+};
+// <3 <3 ;) :( kaut kā viss galīgi garām
+
+//)
+
+
+//better: allLives.splice(5-collisionCount);
+//****
+// let Text = function() {
+//     //this.x = x;
+//     this.y = 100;
+//     this.x = 40;
+//     this.levelUpText = 'WhY DiD ThE BuG CrOsS ThE RoAd?'
+//     this.sprite = 'images/question.png'
+// }
+// Text.prototype.render = function() {
+//   if(player.win){
+//     ctxTwo.fillStyle = 'gold';
+//     ctxTwo.fillText(this.levelUpText, this.x, this.y);
+//     //ctxTwo.font = 'bolder 30px Verdana';
+//     //ctxTwo.shadowColor = 'black';
+//     //ctxTwo.shadowBlur = 10;
+//   }
+//
+// };
+// let title = new Text();
 //***
 
 

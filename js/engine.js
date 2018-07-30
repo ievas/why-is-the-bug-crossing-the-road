@@ -28,10 +28,13 @@ let Engine = (function(global) {
 
     canvasOne.width = 505;
     canvasOne.height = 606;
-    canvasTwo.width = 505;
-    canvasTwo.height = 75;
+    canvasTwo.width = 570;
+    canvasTwo.height = 200;
+    canvasOne.id = 'gameBoard';
+    canvasTwo.id = 'header';
     doc.body.appendChild(canvasOne);
     doc.body.appendChild(canvasTwo);
+
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -164,8 +167,11 @@ let Engine = (function(global) {
       allStars.forEach(function(star) {
         star.render();
       });
-      title.render();
+      //title.render();
       levelTitle.render();
+      allLives.forEach(function(life){
+        life.render();
+      })
     }
 
     /* This function does nothing but it could have been a good place to
@@ -196,8 +202,9 @@ let Engine = (function(global) {
         'images/Star.png',
         'images/big-star.png',
         'images/question.png',
-        'images/red_star.png'
-
+        'images/red_star.png',
+        'images/player-lives.png',
+        'images/player-bug-cry.png',
     ]);
     Resources.onReady(init);
 
