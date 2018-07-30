@@ -1,4 +1,4 @@
-
+//Enemy constructor
 let Enemy = function(x, row, speed, person) {
 
   this.x = x;
@@ -11,33 +11,24 @@ let Enemy = function(x, row, speed, person) {
 
   this.sprite = `images/char-${person}.png`;
 };
-//*****
 
-//****
-//methods
-// Update the enemy's position, required method for game
+// Updates the enemy's position
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-
     if(this.x < this.horizontalMove * 5){
       //move forward
-      this.x += this.speed * dt;//increment x by speed and multiply by dt
-      //reset the enemies position if it crossed the game board
-    } // by MC
-    else{
-      this.x = -this.horizontalMove;//reset enemy position
+      this.x += this.speed * dt;
+      //resets the enemies position if it crossed the game board
     }
-
+    else{
+      this.x = -this.horizontalMove;
+    }
 };
-
-// Draw the enemy on the screen, required method for game
+// Draws the enemy on the screen
 Enemy.prototype.render = function() {
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-//****
+//Level count and display
 let Level = function(){
   this.title = 'Level'
   this.level = 1;
@@ -51,11 +42,8 @@ Level.prototype.render = function() {
   ctxTwo.fillText(`${this.title}: ${this.level}`, this.x, this.y);
 }
 let levelTitle = new Level();
-//*****
-
-//*****
-let Player = function(){//KONSTRUKTORS
-  //Variables go here
+//Player constructor
+let Player = function(){
   this.sprite = 'images/player-bug.png';
   this.horizontalMove = 101;
   this.verticalMove = 83;
@@ -67,28 +55,19 @@ let Player = function(){//KONSTRUKTORS
   this.win = false;
   this.collision = false;
 };
-//player.render(){
-//  ctx.drawImage(Rescources.get(this.sprite), this.x, this.y);
-//}
-//methods
-
-
+//Here goes everything we want to update about players position as each game loop starts
 Player.prototype.update = function(dt){
-  //Here goes everything we want to update about players position as each game loop starts
-  //update position/multiply coordinates by dt?
-  //check checkCollisions//
-  //did players x and y coordinates collide with enemy sprite (or its coordinates?)
-  //a win or level up: did players x and y coordinates reached river tiles sprite (or its coordinates?)
   for (let i = 0; i < allEnemies.length; i++) {
     //Collision detection
     let enemy = allEnemies[i];
     if (this.row === enemy.row && enemy.x + enemy.horizontalMove/1.5 > this.x && enemy.x < this.x + this.horizontalMove/1.5){
       this.resetPosition();
       this.collision = true;
+      //Counts collisions and reduces lives accordingly
       if (player.collision === true){
         collisionCount++;
         };
-  //better: allLives.splice(5-collisionCount);
+        //better: allLives.splice(5-collisionCount);
       if(collisionCount===1){
           allLives.splice(3)
         };
@@ -104,61 +83,59 @@ Player.prototype.update = function(dt){
       if (collisionCount>=5){
       player.sprite = "images/player-bug-cry.png"
       console.log('cry')
-      //try again//reset levels
       popUp();
       };
     };
-  }
-
-  if (this.row === 0) {
-    console.log('win!');
-    this.win = true;
-    this.resetPosition();
-    levelTitle.level++;
-    allEnemies.push(randomEnemy());
-  }
+  };
+    //Level upgrade
+    if (this.row === 0) {
+      this.win = true;
+      this.resetPosition();
+      levelTitle.level++;
+      allEnemies.push(randomEnemy());
+    }
 };
-Player.prototype.render = function(){//draws player on screen
+//Draws player on screen
+Player.prototype.render = function(){
   ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+//This method is handling input from the keyboard event listener
 Player.prototype.handleInput = function(input){
-//this method is handling input from the keyboard event listener -> updating x and y coordinates
-if (collisionCount>=5){
-  return;
-}//===true
-
-switch(input){
-  case 'left':
-    if (this.x >this.horizontalMove){
+  if (collisionCount>=5){
+    return;
+};
+  switch(input){
+    case 'left':
+      if (this.x >this.horizontalMove){
       this.x -= this.horizontalMove;
-  }
+    }
     break;
-  case 'up':
-    this.row--;
-    if (this.y > (this.verticalMove * 1.9)){
+    case 'up':
+      this.row--;
+      if (this.y > (this.verticalMove * 1.9)){
       this.y -= this.verticalMove;
     }
     break;
-  case 'right':
-    if (this.x < this.horizontalMove * 3.9){
-      this.x += this.horizontalMove;
-  }
+    case 'right':
+      if (this.x < this.horizontalMove * 3.9){
+        this.x += this.horizontalMove;
+    }
     break;
-  case 'down':
-  if (this.y < this.verticalMove * 5){
+    case 'down':
+      if (this.y < this.verticalMove * 5){
       this.y += this.verticalMove;
       this.row++;
-  }
+    }
     break;
-}
-}
+  };
+};
+//Reset player's position
 Player.prototype.resetPosition = function(){
   this.x = this.startX;
   this.y = this.startY;
   this.row = 5;
-}
-// instantiate your objects.
-//if(levelTitle.level === 1){}
+};
+
 let pinkGirl = new Enemy(-101, 1, 150, 'pink-girl-copy');
 let hornGirl = new Enemy(-101, 2, 200, 'horn-girl');
 let bugBoy = new Enemy((-101*2), 2, 70, 'boy');
@@ -167,41 +144,32 @@ let bugBoy2 = new Enemy(-101, 3, 300, 'boy');
 let hornGirl2 = new Enemy(-101, 1, 90, 'horn-girl');
 let princess = new Enemy(-101, 1, 80, 'princess-girl');
 
-//if(levelTitle.level === 2){}
-//if(levelTitle.level === 3){}
-//if(player.win){
-//allEnemies.push(princess);
-//let randomEnemy;
-//enemy.speed + 10;
-//}
-
-
+//Shuffles enemy's properties, returns a random enemy
 function randomEnemy() {
   let randomSpeed = 50 + Math.floor(Math.random() * 251);
   let randomRow = 1 + Math.floor(Math.random() * 3);
   let persons = ['pink-girl-copy', 'horn-girl', 'cat-girl', 'boy', 'princess-girl'];
   let randomPerson = persons[Math.floor(Math.random() * persons.length)];
   return new Enemy(-101, randomRow, randomSpeed, randomPerson);
-}
+};
 
 let player = new Player();
 let allEnemies = [];
 
 allEnemies.push(bugBoy, pinkGirl, catGirl);
-//****
-let Star = function(x, row) {//KONSTRUKTORS
+//Draws stars on the river row in case of win
+let Star = function(x, row) {
     this.x = x +10;
      this.y = row + 20;
      this.row = row;
      this.sprite = 'images/red_star.png';
 };
-
 Star.prototype.render = function(){
   if(player.win){
     ctxOne.drawImage(Resources.get(this.sprite), this.x, this.y);
     setTimeout(function(){
       player.win = false;
-    }, 500);
+    }, 700);
   };
 };
 let allStars = [];
@@ -212,7 +180,7 @@ let fourthStar = new Star(303,0);
 let fifthStar = new Star(404,0);
 
 allStars.push(firstStar, secondStar, thirdStar, fourthStar, fifthStar);
-//****
+//Draws life symbols on the screen
 let Life = function(x, y){
   this.sprite = 'images/player-lives.png';
   this.x = x;
@@ -220,7 +188,6 @@ let Life = function(x, y){
 }
 Life.prototype.render = function(){
   ctxTwo.drawImage(Resources.get(this.sprite), this.x, this.y);
-  //ctxTwo
 };
 let life1 = new Life(555,101);
 let life2 = new Life(5,10);
@@ -230,10 +197,8 @@ let life4 = new Life(5,30);
 let allLives = [];
 allLives.push(life1, life2, life3, life4);
 
-
 let collisionCount = 0;
-
-
+//Game Over modal
 function popUp(){
   let tryAgain = document.createElement('div');
   tryAgain.id = 'tryAgain';
@@ -254,11 +219,8 @@ function reset(){
   document.body.removeChild(tryAgain);
   player.sprite = 'images/player-bug.png'
 };
-
-//***
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// This listens for key presses and sends the keys to the
+// Player.handleInput() method.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
