@@ -20,7 +20,7 @@ Clone or download the repository and open index.html in a browser of your choice
 
 ## How to Play
 
-Go to: https://github.com/ievas/why-is-the-bug-crossing-the-road
+Go to: https://ievas.github.io/why-is-the-bug-crossing-the-road/
 
 ## Authors
 
